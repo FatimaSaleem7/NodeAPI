@@ -44,6 +44,18 @@ app.get('/employees',async(req,res)=>{
     }
 });
 
+app.get('/job-history/employees', async (req, res) => {
+    try {
+      const result = await pool.query(`
+        SELECT jh.*, e.first_name, e.last_name
+        FROM job_history jh
+        JOIN employees e ON jh.employee_id = e.employee_id
+      `);
+      res.json(result.rows);
+    } catch (err) {
+      res.status(500).json({ Error: err.message });
+    }
+  });
 
 const PORT = process.env.PORT;
 app.listen(PORT,()=>{
